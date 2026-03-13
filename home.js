@@ -1,13 +1,29 @@
-const spots = [
-  "spot1","spot2","spot3","spot4","spot5",
-  "spot6","spot7","spot8","spot9","spot10"
-];
+// --- 設定 ---
+const TOTAL_SPOTS = 10;
 
-let count = spots.filter(s => localStorage.getItem(s) === "true").length;
+// --- URL から spot番号を取得 ---
+const params = new URLSearchParams(window.location.search);
+const spot = params.get("spot");
 
-document.getElementById("progress").innerText = `達成状況：${count}/10`;
+// --- ローカルストレージから進捗を読み込み ---
+let progress = JSON.parse(localStorage.getItem("fountain_progress")) || [];
 
-if (count === 10) {
-  document.getElementById("clear-message").style.display = "block";
+// --- spot を見つけた場合の処理 ---
+if (spot) {
+  const num = Number(spot);
+  if (!progress.includes(num)) {
+    progress.push(num);
+    localStorage.setItem("fountain_progress", JSON.stringify(progress));
+  }
+}
+
+// --- 達成状況の表示 ---
+const status = document.getElementById("status");
+const count = progress.length;
+
+if (count >= TOTAL_SPOTS) {
+  status.innerHTML = `<div class="complete">🎉 全部見つけました！<br>フロントで画面をお見せください。</div>`;
+} else {
+  status.textContent = `達成状況：${count} / ${TOTAL_SPOTS}`;
 }
 
