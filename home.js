@@ -27,4 +27,3 @@ if (count >= TOTAL_SPOTS) {
   status.textContent = `達成状況：${count} / ${TOTAL_SPOTS}`;
 }
 
-
